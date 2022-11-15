@@ -1,0 +1,42 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+
+class Textbox extends StatelessWidget {
+  String name;
+  String ht;
+  String lt;
+  int minl;
+  int maxl;
+  Icon icon;
+  int? wed;
+  bool ro;
+
+  Textbox({
+    super.key,
+    required this.name,
+    required this.minl,
+    required this.maxl,
+    required this.ht,
+    required this.lt,
+    required this.icon,
+    this.ro=false,
+    this.wed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        width: 300,
+        child: FormBuilderTextField(
+            readOnly: ro,
+            name: name,
+            minLines: minl,
+            maxLines: maxl,
+            decoration: InputDecoration(
+                icon: icon,
+                labelText: lt,
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                hintText: ht)));
+  }
+}
