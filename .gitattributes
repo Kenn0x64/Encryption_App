@@ -9,4 +9,7 @@ android/* linguist-vendored=false
 *.js linguist-detectable=false
 *.html linguist-detectable=false
 *.xml linguist-detectable=false
-*.dart linguist-detectable=false
+*.c linguist-detectable=false
+cmake linguist-detectable=false
+
+*.dart linguist-detectable=true
