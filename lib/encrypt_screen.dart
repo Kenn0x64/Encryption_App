@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import './widgets/textbox.dart';
@@ -11,6 +13,9 @@ class FS extends StatefulWidget {
 }
 
 class EnScreenState extends State<FS> {
+  String key = "";
+  String enText = "";
+
   final _formKey = GlobalKey<FormBuilderState>();
 
   @override
@@ -18,11 +23,6 @@ class EnScreenState extends State<FS> {
     return Container(
       margin: const EdgeInsets.all(35),
       child: FormBuilder(
-        onChanged: () {
-          if (_formKey.currentState!.validate()) {
-            setState(() {});
-          }
-        },
         key: _formKey,
         child: Column(
           children: [
@@ -33,15 +33,14 @@ class EnScreenState extends State<FS> {
             ),
             Textbox(
               vali: (value) {
-                if (value!.length == 16 ||
-                    value.length == 24 ||
-                    value.length == 32) {
-                  return null;
+                if (value!.isEmpty) {
+                  return "Key Is Required!";
                 }
-                return "Key Must Be 16 or 24 or 32 Chars";
+                return null;
               },
+              ro: true,
               name: 'key',
-              ht: 'Your Key',
+              ht: "Encrytpion Key",
               lt: 'Key',
               minl: 1,
               maxl: 2,
@@ -55,6 +54,9 @@ class EnScreenState extends State<FS> {
             ),
             Textbox(
               vali: (value) {
+                if (value!.isEmpty) {
+                  return "Text Should Not Be Empty";
+                }
                 return null;
               },
               name: 'text',
@@ -73,9 +75,6 @@ class EnScreenState extends State<FS> {
             Flexible(
               fit: FlexFit.loose,
               child: Textbox(
-                              vali: (p0) {
-                return null;
-              },
                 name: 'cipher',
                 ht: 'Encrypted Text',
                 lt: 'Encrypted',
@@ -92,32 +91,38 @@ class EnScreenState extends State<FS> {
                 children: [
                   ElevatedButton(
                       onPressed: () {
+                        String randomText = base64UrlEncode(List<int>.generate(
+                            24, (i) => Random.secure().nextInt(255)));
+                            // 22*4
+                        key = randomText;
+                        _formKey.currentState!.fields['key']!.didChange(key);
+                        setState(() {
+                          print(randomText.length);
+                        });
+                      },
+                      child: const Text("Genarate Random Key")),
+                  ElevatedButton(
+                      onPressed: () {
                         _formKey.currentState!.reset();
                       },
                       child: const Text("Reset")),
                   ElevatedButton(
-                      onPressed: () async {
+                      onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          // final key = en.Key.fromUtf8(
-                          //     _formKey.currentState!.fields['key']!.value);
+                          final key = en.Key.fromUtf8(this.key);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Encrypted Text")));
+                          final iv = en.IV.fromLength(16);
+                          final encrypter = en.Encrypter(en.AES(key));
+                          final encrypted = encrypter.encrypt(
+                              _formKey.currentState!.fields['text']!.value,
+                              iv: iv);
 
-                          // ScaffoldMessenger.of(context)
-                          //     .showSnackBar(SnackBar(content: Text("Done")));
+                          _formKey.currentState!.fields['cipher']!
+                              .didChange(encrypted.base64);
+                          enText = encrypted.base64;
+                          print(encrypted.base64);
                         }
-                        // ScaffoldMessenger.of(context)
-                        //               .showSnackBar(SnackBar(content: Text("")));
-
-                        //   final iv = en.IV.fromLength(16);
-
-                        //   final encrypter = en.Encrypter(en.AES(key));
-
-                        //   final encrypted = encrypter.encrypt(
-                        //       _formKey.currentState!.fields['text']!.value,
-                        //       iv: iv);
-
-                        //   print(encrypted.base64);
-
-                        //   setState(() {});
                       },
                       child: const Text("Encrypt")),
                 ],

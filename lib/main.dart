@@ -8,6 +8,9 @@ void main() {
 }
 
 class App extends StatelessWidget {
+   final String enkey = "";
+   final String enText = "";
+
   const App({super.key});
 
   @override

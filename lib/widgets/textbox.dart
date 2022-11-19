@@ -4,26 +4,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class Textbox extends StatelessWidget {
-  String? Function(String?)? vali;
   String name;
   String ht;
   String lt;
+  String initdata;
   int minl;
-  int ct=0;
   int maxl;
   Icon icon;
   int? wed;
   bool ro;
 
+  String? Function(String?)? vali;
+  // int ct=0;
+
   Textbox(
       {super.key,
-      this.vali,
       required this.name,
       required this.minl,
       required this.maxl,
       required this.ht,
       required this.lt,
       required this.icon,
+      this.vali,
+      this.initdata = "",
       this.ro = false,
       this.wed});
 
@@ -34,18 +37,19 @@ class Textbox extends StatelessWidget {
         return SizedBox(
             width: 300,
             child: FormBuilderTextField(
-                validator: vali,
-                onChanged: (value) {
-                  setState(() {
-                    ct = value!.length;
-                  });
-                },
+              validator: vali,
+                initialValue: initdata,
+                // onChanged: (value) {
+                //   setState(() {
+                //     ct = value!.length;
+                //   });
+                // },
                 readOnly: ro,
                 name: name,
                 minLines: minl,
                 maxLines: maxl,
                 decoration: InputDecoration(
-                    counterText: ct.toString() ,
+                    // counterText: ct.toString() ,
                     icon: icon,
                     labelText: lt,
                     border: OutlineInputBorder(
