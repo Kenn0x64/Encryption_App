@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import './widgets/textbox.dart';
 import 'package:encrypt/encrypt.dart' as en;
+import './inhirteddata.dart';
 
 class FS extends StatefulWidget {
   const FS({super.key});
@@ -13,6 +14,11 @@ class FS extends StatefulWidget {
 }
 
 class EnScreenState extends State<FS> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   String key = "";
   String enText = "";
 
@@ -101,33 +107,35 @@ class EnScreenState extends State<FS> {
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text("Encrypted Text")));
                           final iv = en.IV.fromLength(16);
+                          Inhertieddata.of(context)!.iv = iv;
+
                           final encrypter = en.Encrypter(en.AES(key));
+                          Inhertieddata.of(context)!.encrypter = encrypter;
                           final encrypted = encrypter.encrypt(
                               _formKey.currentState!.fields['text']!.value,
                               iv: iv);
 
                           _formKey.currentState!.fields['cipher']!
                               .didChange(encrypted.base64);
-                          enText = encrypted.base64;
-                          print(encrypted.base64);
+
+                          Inhertieddata.of(context)!.enText = encrypted;
                         }
                       },
                       child: const Text("Encrypt")),
                 ],
               ),
             ),
-             ElevatedButton(
-                      onPressed: () {
-                        String randomText = base64UrlEncode(List<int>.generate(
-                            24, (i) => Random.secure().nextInt(255)));
-                            // 22*4
-                        key = randomText;
-                        _formKey.currentState!.fields['key']!.didChange(key);
-                        setState(() {
-                          print(randomText.length);
-                        });
-                      },
-                      child: const Text("Genarate Random Key"))
+            ElevatedButton(
+                onPressed: () {
+                  String randomText = base64UrlEncode(List<int>.generate(
+                      24, (i) => Random.secure().nextInt(255)));
+
+                  key =randomText ;
+                  _formKey.currentState!.fields['key']!.didChange(randomText);
+                  Inhertieddata.of(context)!.enkey = key;
+                  setState(() {});
+                },
+                child: const Text("Genarate Random Key"))
           ],
         ),
       ),
