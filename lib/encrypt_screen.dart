@@ -91,18 +91,6 @@ class EnScreenState extends State<FS> {
                 children: [
                   ElevatedButton(
                       onPressed: () {
-                        String randomText = base64UrlEncode(List<int>.generate(
-                            24, (i) => Random.secure().nextInt(255)));
-                            // 22*4
-                        key = randomText;
-                        _formKey.currentState!.fields['key']!.didChange(key);
-                        setState(() {
-                          print(randomText.length);
-                        });
-                      },
-                      child: const Text("Genarate Random Key")),
-                  ElevatedButton(
-                      onPressed: () {
                         _formKey.currentState!.reset();
                       },
                       child: const Text("Reset")),
@@ -127,7 +115,19 @@ class EnScreenState extends State<FS> {
                       child: const Text("Encrypt")),
                 ],
               ),
-            )
+            ),
+             ElevatedButton(
+                      onPressed: () {
+                        String randomText = base64UrlEncode(List<int>.generate(
+                            24, (i) => Random.secure().nextInt(255)));
+                            // 22*4
+                        key = randomText;
+                        _formKey.currentState!.fields['key']!.didChange(key);
+                        setState(() {
+                          print(randomText.length);
+                        });
+                      },
+                      child: const Text("Genarate Random Key"))
           ],
         ),
       ),
