@@ -1,8 +1,7 @@
+import 'package:encryptapp/crypto.dart';
 import 'package:encryptapp/widgets/textbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'inhirteddata.dart';
-
 
 class SS extends StatefulWidget {
   const SS({super.key});
@@ -12,7 +11,7 @@ class SS extends StatefulWidget {
 }
 
 class DeScreenState extends State<SS> {
-  String? key;
+
   final _formKey = GlobalKey<FormBuilderState>();
 
   @override
@@ -29,6 +28,12 @@ class DeScreenState extends State<SS> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
             ),
             Textbox(
+               vali: (value) {
+                if (value!.isEmpty) {
+                  return "Please Press Refresh Button";
+                }
+                return null;
+              },
               ro: true,
               name: 'key',
               ht: 'Your Key',
@@ -44,6 +49,12 @@ class DeScreenState extends State<SS> {
               ),
             ),
             Textbox(
+              vali: (value) {
+                if (value!.isEmpty) {
+                  return "Enter Encrypted Data";
+                }
+                return null;
+              },
               name: 'entext',
               ht: 'Encrypted Text',
               lt: 'Encrypted',
@@ -60,13 +71,13 @@ class DeScreenState extends State<SS> {
             Flexible(
               fit: FlexFit.loose,
               child: Textbox(
+                ro: true,
                 name: 'text',
                 ht: 'Decrypted Text',
                 lt: 'Decrypted',
                 minl: 3,
                 maxl: 5,
                 icon: const Icon(Icons.text_fields),
-                ro: true,
               ),
             ),
             Container(
@@ -81,18 +92,14 @@ class DeScreenState extends State<SS> {
                       child: const Text("Reset")),
                   ElevatedButton(
                       onPressed: () {
-                         if (_formKey.currentState!.validate()) {
+                        if (_formKey.currentState!.validate()) {
 
-                          final de = Inhertieddata.of(context)!.encrypter;
-                          final dedata = de.decrypt(
-                              Inhertieddata.of(context)!.enText,
-                              iv: Inhertieddata.of(context)!.iv);
-
-                                ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Dncrypted Text")));
-
+                          EncryptData.decrypt(
+                              _formKey.currentState!.fields['entext']!.value);
                           _formKey.currentState!.fields['text']!
-                              .didChange(dedata);
+                              .didChange(EncryptData.decrypted);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Decrypted Data")));
                         }
                       },
                       child: const Text("Decrypt")),
@@ -100,16 +107,14 @@ class DeScreenState extends State<SS> {
               ),
             ),
             ElevatedButton(
-                      onPressed: () {
-                         _formKey.currentState!.fields['key']!
-                            .didChange(Inhertieddata.of(context)!.enkey);
-
-                        _formKey.currentState!.fields['entext']!
-                            .didChange(Inhertieddata.of(context)!.enText.base64);
-
-                        setState(() {});
-                      },
-                      child: const Text("Refresh")),
+                onPressed: () {
+                  _formKey.currentState!.fields['key']!
+                      .didChange(EncryptData.randomkey);
+                  _formKey.currentState!.fields['entext']!
+                      .didChange(EncryptData.encrypted!.base64);
+                  setState(() {});
+                },
+                child: const Text("Refresh")),
           ],
         ),
       ),

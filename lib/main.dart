@@ -1,17 +1,14 @@
 import 'package:encryptapp/decrypt_screen.dart';
 import 'package:flutter/material.dart';
 import './encrypt_screen.dart';
-import './inhirteddata.dart';
 
 void main() {
-  runApp(MaterialApp(
-      home: Inhertieddata(
-    child: const App(),
-  )));
+  runApp(const MaterialApp(
+    home: App(),
+  ));
 }
 
 class App extends StatefulWidget {
-
   const App({super.key});
 
   @override
@@ -19,28 +16,30 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  int index=0;
-
+  int index = 0;
   List<Widget> screen = [const FS(), const SS()];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.key), label: "Encrypt"),
-          BottomNavigationBarItem(icon: Icon(Icons.lock_open), label: "Dncrypt")
-        ],
-        currentIndex: index,
-        onTap: (value) {
-          setState(() {
-          index = value;
-          });
-        },
-      ),
-      appBar: AppBar(),
-      // drawer: drawerBuilder(context),
-      body:IndexedStack(index: index,children: screen,)
-    );
+        bottomNavigationBar: BottomNavigationBar(
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.key), label: "Encrypt"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.lock_open), label: "Dncrypt")
+          ],
+          currentIndex: index,
+          onTap: (value) {
+            setState(() {
+              index = value;
+            });
+          },
+        ),
+        appBar: AppBar(),
+        // drawer: drawerBuilder(context),
+        body: IndexedStack(
+          index: index,
+          children: screen,
+        ));
   }
 }
