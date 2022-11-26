@@ -1,5 +1,9 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
+import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:share_plus/share.dart';
 import './widgets/textbox.dart';
 import './crypto.dart';
 
@@ -11,7 +15,6 @@ class FS extends StatefulWidget {
 }
 
 class EnScreenState extends State<FS> {
-  
   final _formKey = GlobalKey<FormBuilderState>();
 
   @override
@@ -26,21 +29,6 @@ class EnScreenState extends State<FS> {
               margin: const EdgeInsets.fromLTRB(27, 13, 15, 15),
               child: const Text("Encrypt",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
-            ),
-            Textbox(
-              vali: (value) {
-                if (value!.isEmpty) {
-                  return "Key Is Required!";
-                }
-                return null;
-              },
-              ro: true,
-              name: 'key',
-              ht: "Encrytpion Key",
-              lt: 'Key',
-              minl: 1,
-              maxl: 2,
-              icon: const Icon(Icons.key),
             ),
             const Flexible(
               fit: FlexFit.loose,
@@ -87,6 +75,7 @@ class EnScreenState extends State<FS> {
                 children: [
                   ElevatedButton(
                       onPressed: () {
+                        EncryptData.encrypted = Encrypted.from64("");
                         _formKey.currentState!.reset();
                       },
                       child: const Text("Reset")),
@@ -107,15 +96,34 @@ class EnScreenState extends State<FS> {
                 ],
               ),
             ),
-            const SizedBox(height: 10,),
-            ElevatedButton(
+            const SizedBox(
+              height: 10,
+            ),
+            IconButton(
                 onPressed: () {
-                  EncryptData.genRandomKey();
-                  _formKey.currentState!.fields['key']!
-                      .didChange(EncryptData.randomkey);
-                  setState(() {});
+                  if (_formKey.currentState!.validate()) {
+                    Share.share(_formKey.currentState!.fields['cipher']!.value);
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text("Oh Come On!"),
+                          content: const Text(
+                              "Why Do You Wanna Share Empty Box??\nAre You Okey?"),
+                          actions: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("Okey?"))
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
-                child: const Text("Genarate Random Key"))
+                icon: const Icon(Icons.share))
           ],
         ),
       ),

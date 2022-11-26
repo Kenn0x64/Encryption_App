@@ -4,6 +4,7 @@ import './encrypt_screen.dart';
 
 void main() {
   runApp(const MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: App(),
   ));
 }

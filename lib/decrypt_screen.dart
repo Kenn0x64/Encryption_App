@@ -11,7 +11,6 @@ class SS extends StatefulWidget {
 }
 
 class DeScreenState extends State<SS> {
-
   final _formKey = GlobalKey<FormBuilderState>();
 
   @override
@@ -26,21 +25,6 @@ class DeScreenState extends State<SS> {
               margin: const EdgeInsets.fromLTRB(27, 13, 15, 15),
               child: const Text("Decrypt",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
-            ),
-            Textbox(
-               vali: (value) {
-                if (value!.isEmpty) {
-                  return "Please Press Refresh Button";
-                }
-                return null;
-              },
-              ro: true,
-              name: 'key',
-              ht: 'Your Key',
-              lt: 'Key',
-              minl: 1,
-              maxl: 2,
-              icon: const Icon(Icons.key),
             ),
             const Flexible(
               fit: FlexFit.loose,
@@ -93,11 +77,12 @@ class DeScreenState extends State<SS> {
                   ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-
                           EncryptData.decrypt(
                               _formKey.currentState!.fields['entext']!.value);
+                        
                           _formKey.currentState!.fields['text']!
                               .didChange(EncryptData.decrypted);
+                              
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text("Decrypted Data")));
                         }
@@ -108,8 +93,6 @@ class DeScreenState extends State<SS> {
             ),
             ElevatedButton(
                 onPressed: () {
-                  _formKey.currentState!.fields['key']!
-                      .didChange(EncryptData.randomkey);
                   _formKey.currentState!.fields['entext']!
                       .didChange(EncryptData.encrypted!.base64);
                   setState(() {});
