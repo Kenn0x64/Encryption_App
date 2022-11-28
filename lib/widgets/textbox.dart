@@ -1,5 +1,4 @@
 // ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
@@ -37,19 +36,13 @@ class Textbox extends StatelessWidget {
         return SizedBox(
             width: 300,
             child: FormBuilderTextField(
-              validator: vali,
+                validator: vali,
                 initialValue: initdata,
-                // onChanged: (value) {
-                //   setState(() {
-                //     ct = value!.length;
-                //   });
-                // },
                 readOnly: ro,
                 name: name,
                 minLines: minl,
                 maxLines: maxl,
                 decoration: InputDecoration(
-                    // counterText: ct.toString() ,
                     icon: icon,
                     labelText: lt,
                     border: OutlineInputBorder(
