@@ -9,8 +9,9 @@ class EncryptData {
   static Encrypted? encrypted;
 
   static void genRandomKey() {
-    secret = base64UrlEncode(
+    secret = base64Encode(
         List<int>.generate(24, (index) => Random.secure().nextInt(255)));
+    print(secret);
   }
 
   static encrypt(String data) {

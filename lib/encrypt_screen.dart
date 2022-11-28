@@ -1,5 +1,4 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
-
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -81,6 +80,7 @@ class EnScreenState extends State<FS> {
                       child: const Text("Reset")),
                   ElevatedButton(
                       onPressed: () {
+                        EncryptData.genRandomKey();
                         if (_formKey.currentState!.validate()) {
                           EncryptData.encrypt(
                               _formKey.currentState!.fields['text']!.value);
